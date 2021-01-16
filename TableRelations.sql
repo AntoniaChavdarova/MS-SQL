@@ -60,4 +60,4 @@ USE Geography
 SELECT MountainRange , PeakName , Elevation   FROM Peaks as p
 JOIN Mountains as m ON p.MountainId = m.Id
 WHERE MountainRange Like 'Rila'
-Order BY Elevation 
+Order BY Elevation DESC
