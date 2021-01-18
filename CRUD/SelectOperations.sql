@@ -1,5 +1,3 @@
-
-
 SELECT FirstName + '.' + LastName + '@softuni.bg' AS 'Full Email Address' 
 FROM Employees
 
@@ -57,10 +55,6 @@ ORDER BY StartDate , [Name]
 SELECT TOP 7 FirstName , LastName , HireDate
 FROM Employees
 Order By HireDate DESC
-
-UPDATE Employees
-SET Salary *=1.12
-WHERE DepartmentID IN (1,2,4,11)
 
 USE Geography
 SELECT TOP 30 CountryName , [Population]
