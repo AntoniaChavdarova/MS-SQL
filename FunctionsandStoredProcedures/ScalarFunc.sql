@@ -59,6 +59,24 @@ END;
 
 SELECT dbo.ufn_IsWordComprised('jkjrbkoj' , 'Rob') AS Result
 
+USE Diablo
+
+CREATE FUNCTION ufn_CashInUsersGames(@GameName nvarchar(30))
+RETURNS TABLE
+AS
+RETURN SELECT (
+  SELECT SUM(Cash) AS [SumCash] FROM (
+		SELECT g.[Name] , ug.Cash ,
+		ROW_NUMBER() OVER (PARTITION BY g.[Name] ORDER BY ug.Cash DESC) as [RowNum]
+		FROM UsersGames as ug
+		JOIN Games as g ON ug.GameId = g.Id
+		WHERE g.[Name] = @GameName
+		) as [RowNumQuerry]
+WHERE [RowNum] % 2 <> 0
+) as [SumCash]
+
+SELECT * FROM ufn_CashInUsersGames('Love in a mist')
+
 
 
 

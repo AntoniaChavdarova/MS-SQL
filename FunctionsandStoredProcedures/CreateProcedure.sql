@@ -92,5 +92,25 @@ ORDER BY ah.FirstName , ah.LastName
 
 Exec usp_GetHoldersWithBalanceHigherThan 1000
 
-SELECT * FROM AccountHolders
-SELECT * FROM Accounts
+CREATE FUNCTION ufn_CalculateFutureValue(@Sum decimal(18,4) , @Yir float , @numYears int)
+RETURNS decimal(18 ,4)
+AS
+BEGIN
+DECLARE @res decimal(18 ,4);
+SET @res = @sum * (POWER((1 + @Yir) ,@numYears));
+RETURN @res;
+END
+
+
+CREATE OR ALTER PROC usp_CalculateFutureValueForAccount(@Id INT , @IR FLOAT)
+AS
+SELECT ah.Id , ah.FirstName as [First Name] ,
+ah.LastName as [LastName] , a.Balance as [Current Balance],
+dbo.ufn_CalculateFutureValue(a.Balance , @IR , 5) AS [Balance in 5 years]
+FROM AccountHolders as ah
+JOIN Accounts as a ON ah.Id = a.AccountHolderId
+WHERE a.Id = @Id;
+ 
+ 
+ EXEC usp_CalculateFutureValueForAccount 1 , 0.1
+
